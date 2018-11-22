@@ -5,28 +5,36 @@
     <form>
       <fieldset class="files">
         <div class="multiple-upload">
+           <div class="example-foorer">
+              <div class="btn-group">
+                <file-upload class="btn btn-primary dropdown-toggle" :post-action="postAction" :put-action="putAction"
+                  :extensions="extensions" :accept="accept" :multiple="multiple" :directory="directory" :size="size || 0"
+                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)" :headers="headers" :data="data" :drop="drop"
+                  :drop-directory="dropDirectory" :add-index="addIndex" v-model="files" @input-filter="inputFilter"
+                  @input-file="inputFile" ref="upload">
+                  <i class="fa fa-plus"></i>
+                  Select or Drag your File
+                </file-upload>
+
+              </div>
+              <button type="button" class="btn btn-success" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                Start Upload
+              </button>
+
+            </div>
           <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
             <h3>Drop files to upload</h3>
           </div>
           <div class="upload" v-show="!isOption">
             <div class="table-responsive">
               <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Thumb</th>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Speed</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
+                
                 <tbody>
                   <tr v-if="!files.length">
                     <td colspan="7">
                       <div class="text-center p-5">
-                        <label :for="name" class="btn btn-lg btn-primary">Select Files</label>
+                        
                       </div>
                     </td>
                   </tr>
@@ -45,9 +53,14 @@
                           role="progressbar" :style="{width: file.progress + '%'}">{{file.progress}}%</div>
                       </div>
                     </td>
-                    <!-- <td>{{file.size | formatSize}}</td>
-            <td>{{file.speed | formatSize}}</td> -->
-
+                    <td>{{file.size | formatSize}}</td>
+            <td>{{file.speed | formatSize}}</td>
+                    <div>
+    <div>
+      <progress :value="parseInt(file.progress)" max="100">
+      </progress>
+  </div>
+  </div>
                     <td v-if="file.error">{{file.error}}</td>
                     <td v-else-if="file.success">success</td>
                     <td v-else-if="file.active">active</td>
@@ -60,24 +73,6 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div class="example-foorer">
-              <div class="btn-group">
-                <file-upload class="btn btn-primary dropdown-toggle" :post-action="postAction" :put-action="putAction"
-                  :extensions="extensions" :accept="accept" :multiple="multiple" :directory="directory" :size="size || 0"
-                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)" :headers="headers" :data="data" :drop="drop"
-                  :drop-directory="dropDirectory" :add-index="addIndex" v-model="files" @input-filter="inputFilter"
-                  @input-file="inputFile" ref="upload">
-                  <i class="fa fa-plus"></i>
-                  Select
-                </file-upload>
-
-              </div>
-              <button type="button" class="btn btn-success" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
-                <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                Start Upload
-              </button>
-
             </div>
           </div>
 
@@ -103,7 +98,7 @@
         </md-list>
       </fieldset>
     </form>
-    <md-button type="button" class="md-primary add">GO TO DASHBOARD</md-button>
+    <md-button type="button" class="md-primary add"><router-link to="/dashboard">GO TO DASHBOARD</router-link></md-button>
   </div>
 </template>
 
@@ -119,6 +114,8 @@ export default {
   data() {
     return {
       files: [],
+       amount: 25,
+      buffer: 40,
       accept: 'image/png,image/gif,image/jpeg,image/webp',
       extensions: 'gif,jpg,jpeg,png,webp',
         url:null,
@@ -407,4 +404,9 @@ export default {
     width: 80%;
     float: right;
 }
+.example-foorer{
+  border: 1px dotted blue;
+    padding: 50px;
+}
+
 </style>
